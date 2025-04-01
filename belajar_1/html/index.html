@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchoolApp - Aplikasi Manajemen Sekolah</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 360px;
+            margin: 0 auto;
+            background: white;
+            height: 640px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: #3498db;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 18px;
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        .profile-section {
+            padding: 20px;
+            display: flex;
+            background: #4aa3df;
+            color: white;
+        }
+        
+        .profile-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #4aa3df;
+            font-weight: bold;
+        }
+        
+        .profile-info h2 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .profile-info p {
+            margin: 5px 0 0;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        .dashboard {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .menu-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+            height: 100px;
+            text-align: center;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .menu-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .menu-icon {
+            background: #f0f7ff;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            color: #3498db;
+            font-size: 18px;
+        }
+        
+        .menu-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: #444;
+        }
+        
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            background: white;
+            border-top: 1px solid #eee;
+            padding: 12px 0;
+        }
+        
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            color: #999;
+        }
+        
+        .nav-item.active {
+            color: #3498db;
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+        
+        /* Modal untuk halaman detail */
+        .detail-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 10;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+            display: none;
+        }
+        
+        .detail-header {
+            background: #3498db;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-button {
+            margin-right: 15px;
+            cursor: pointer;
+        }
+        
+        .detail-content {
+            padding: 20px;
+        }
+        
+        .payment-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+        }
+        
+        .payment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .payment-month {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .payment-status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-paid {
+            background: #e6f7ee;
+            color: #27ae60;
+        }
+        
+        .status-unpaid {
+            background: #fef2f2;
+            color: #e74c3c;
+        }
+        
+        .payment-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .payment-amount {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .action-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 0;
+            border-radius: 8px;
+            width: 100%;
+            font-weight: 500;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        
+        /* Halaman nilai */
+        .grades-section {
+            margin-top: 15px;
+        }
+        
+        .semester-selector {
+            display: flex;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+        }
+        
+        .semester-item {
+            padding: 8px 15px;
+            margin-right: 10px;
+            background: #f5f5f5;
+            border-radius: 20px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        
+        .semester-item.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .subject-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .subject-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .subject-name {
+            font-weight: 500;
+        }
+        
+        .subject-grade {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 6px;
+            background: #f0f7ff;
+            color: #3498db;
+        }
+        
+        .grade-excellent {
+            background: #e6f7ee;
+            color: #27ae60;
+        }
+        
+        .grade-good {
+            background: #f0f7ff;
+            color: #3498db;
+        }
+        
+        .grade-average {
+            background: #fef9e7;
+            color: #f39c12;
+        }
+        
+        .grade-poor {
+            background: #fef2f2;
+            color: #e74c3c;
+        }
+        
+        .subject-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .detail-value {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        /* Halaman pelanggaran */
+        .violation-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .violation-date {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+        
+        .violation-type {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .violation-points {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            background: #fef2f2;
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+        
+        .violation-description {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        /* Halaman perilaku */
+        .behavior-chart {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            border: 1px dashed #ddd;
+        }
+        
+        .behavior-report {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .report-date {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .report-teacher {
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .report-content {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <!-- Layar Utama -->
+    <div class="container">
+        <div class="header">
+            <h1>SchoolApp</h1>
+            <div style="font-size: 20px;">🔔</div>
+        </div>
+        
+        <div class="profile-section">
+            <div class="profile-image">AS</div>
+            <div class="profile-info">
+                <h2>Ahmad Saputra</h2>
+                <p>Kelas 11 IPA 2 • NISN: 0021384759</p>
+            </div>
+        </div>
+        
+        <div class="dashboard">
+            <div class="menu-card" onclick="showPaymentScreen()">
+                <div class="menu-icon">💰</div>
+                <div class="menu-title">Pembayaran SPP</div>
+            </div>
+            <div class="menu-card" onclick="showViolationsScreen()">
+                <div class="menu-icon">⚠️</div>
+                <div class="menu-title">Pelanggaran</div>
+            </div>
+            <div class="menu-card" onclick="showGradesScreen()">
+                <div class="menu-icon">📊</div>
+                <div class="menu-title">Nilai Semester</div>
+            </div>
+            <div class="menu-card" onclick="showBehaviorScreen()">
+                <div class="menu-icon">🧠</div>
+                <div class="menu-title">Perilaku</div>
+            </div>
+        </div>
+        
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <div class="nav-icon">🏠</div>
+                <div>Beranda</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📚</div>
+                <div>Akademik</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📝</div>
+                <div>Tugas</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div>Profil</div>
+            </div>
+        </div>
+        
+        <!-- Layar Pembayaran SPP -->
+        <div id="payment-screen" class="detail-screen">
+            <div class="detail-header">
+                <div class="back-button" onclick="hideDetailScreen('payment-screen')">←</div>
+                <h1 style="font-size: 18px; margin: 0;">Pembayaran SPP</h1>
+            </div>
+            
+            <div class="detail-content">
+                <div class="payment-card">
+                    <div class="payment-header">
+                        <div class="payment-month">Januari 2025</div>
+                        <div class="payment-status status-paid">Lunas</div>
+                    </div>
+                    <div class="payment-details">
+                        <div>Tanggal Pembayaran</div>
+                        <div>05/01/2025</div>
+                    </div>
+                    <div class="payment-details">
+                        <div>Jumlah</div>
+                        <div class="payment-amount">Rp 500.000</div>
+                    </div>
+                </div>
+                
+                <div class="payment-card">
+                    <div class="payment-header">
+                        <div class="payment-month">Februari 2025</div>
+                        <div class="payment-status status-paid">Lunas</div>
+                    </div>
+                    <div class="payment-details">
+                        <div>Tanggal Pembayaran</div>
+                        <div>03/02/2025</div>
+                    </div>
+                    <div class="payment-details">
+                        <div>Jumlah</div>
+                        <div class="payment-amount">Rp 500.000</div>
+                    </div>
+                </div>
+                
+                <div class="payment-card">
+                    <div class="payment-header">
+                        <div class="payment-month">Maret 2025</div>
+                        <div class="payment-status status-paid">Lunas</div>
+                    </div>
+                    <div class="payment-details">
+                        <div>Tanggal Pembayaran</div>
+                        <div>07/03/2025</div>
+                    </div>
+                    <div class="payment-details">
+                        <div>Jumlah</div>
+                        <div class="payment-amount">Rp 500.000</div>
+                    </div>
+                </div>
+                
+                <div class="payment-card">
+                    <div class="payment-header">
+                        <div class="payment-month">April 2025</div>
+                        <div class="payment-status status-unpaid">Belum Lunas</div>
+                    </div>
+                    <div class="payment-details">
+                        <div>Batas Pembayaran</div>
+                        <div>10/04/2025</div>
+                    </div>
+                    <div class="payment-details">
+                        <div>Jumlah</div>
+                        <div class="payment-amount">Rp 500.000</div>
+                    </div>
+                </div>
+                
+                <button class="action-button">Bayar SPP Bulan April</button>
+            </div>
+        </div>
+        
+        <!-- Layar Pelanggaran -->
+        <div id="violations-screen" class="detail-screen">
+            <div class="detail-header">
+                <div class="back-button" onclick="hideDetailScreen('violations-screen')">←</div>
+                <h1 style="font-size: 18px; margin: 0;">Riwayat Pelanggaran</h1>
+            </div>
+            
+            <div class="detail-content">
+                <div class="violation-card">
+                    <div class="violation-date">15 Maret 2025</div>
+                    <div class="violation-type">Terlambat Masuk Kelas</div>
+                    <div class="violation-points">Poin: -5</div>
+                    <div class="violation-description">
+                        Siswa terlambat masuk kelas selama 20 menit pada mata pelajaran Matematika tanpa alasan yang jelas.
+                    </div>
+                </div>
+                
+                <div class="violation-card">
+                    <div class="violation-date">28 Februari 2025</div>
+                    <div class="violation-type">Tidak Mengenakan Atribut Lengkap</div>
+                    <div class="violation-points">Poin: -3</div>
+                    <div class="violation-description">
+                        Siswa tidak memakai dasi dan ikat pinggang saat upacara bendera hari Senin.
+                    </div>
+                </div>
+                
+                <div class="violation-card">
+                    <div class="violation-date">10 Januari 2025</div>
+                    <div class="violation-type">Tidak Mengumpulkan Tugas</div>
+                    <div class="violation-points">Poin: -5</div>
+                    <div class="violation-description">
+                        Siswa tidak mengumpulkan tugas Bahasa Inggris meskipun sudah diberikan perpanjangan waktu.
+                    </div>
+                </div>
+                
+                <div style="text-align: center; padding: 15px 0; color: #999; font-size: 13px;">
+                    Total Poin Pelanggaran: -13
+                </div>
+            </div>
+        </div>
+        
+        <!-- Layar Nilai Semester -->
+        <div id="grades-screen" class="detail-screen">
+            <div class="detail-header">
+                <div class="back-button" onclick="hideDetailScreen('grades-screen')">←</div>
+                <h1 style="font-size: 18px; margin: 0;">Nilai Semester</h1>
+            </div>
+            
+            <div class="detail-content">
+                <div class="semester-selector">
+                    <div class="semester-item">Semester 1 Kelas 10</div>
+                    <div class="semester-item">Semester 2 Kelas 10</div>
+                    <div class="semester-item active">Semester 1 Kelas 11</div>
+                </div>
+                
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <div class="subject-name">Matematika</div>
+                        <div class="subject-grade grade-excellent">A</div>
+                    </div>
+                    <div class="subject-details">
+                        <div class="detail-item">
+                            <div>Tugas</div>
+                            <div class="detail-value">90</div>
+                        </div>
+                        <div class="detail-item">
+                            <div>Ulangan</div>
+                            <div class="detail-value">85</div>
+                        </div>
+                        <div class="detail-item">
+                            <div>UTS</div>
+                            <div class="detail-value">88</div>
+                        </div>
+                        <div class="detail-item">
+                            <div>UAS</div>
+                            <div class="detail-value">92</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <div class="subject-name">Bahasa Indonesia</div>
+                        <div class="subject-grade grade-good">B+</div>
+                    </div>
+                    <div class="subject-details">
+                        <div class="detail-item">
+                            <div>Tugas</div>
+                            <div class="detail-value">85</div>
+                        </div>
+                        <div class="detail-item">
+                            <div>Ulangan</div>
+                            <div class="detail-value">82</div>
+                        </div>
+                        <div class="detail-item">
+                            <div>UTS</div>
+                            <div class="detail-value">80</div>
+                        </div>
+                        <div class="detail-item">
+                            <div>UAS</div>
+                            <div class="detail-value">83</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <div class="subject-name">Fisika</div>
+                        <div class="subject-grade grade-average">B</div>
+                    </div>
+                    <div class="subject-details">
+                        <div class="detail-item">
+                            <div>Tugas</div>
+                            <div class="detail-value">78</div>
+                        </div>
+                        <div class="detail-item">
+                            <div>Ulangan</div>
+                            <div class="detail-value">75</div>
+                        </div>
+                        <div class="detail-item">
+                            <div>UTS</div>
+                            <div class="detail-value">80</div>
+                        </div>
+                        <div class="detail-item">
+                            <div>UAS</div>
+                            <div class="detail-value">82</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <div class="subject-name">Biologi</div>
+                        <div class="subject-grade grade-excellent">A</div>
+                    </div>
+                    <div class="subject-details">
+                        <div class="detail-item">
+                            <div>Tugas</div>
+                            <div class="detail-value">92</div>
+                        </div>
+                        <div class="detail-item">
+                            <div>Ulangan</div>
+                            <div class="detail-value">88</div>
+                        </div>
+                        <div class="detail-item">
+                            <div>UTS</div>
+                            <div class="detail-value">90</div>
+                        </div>
+                        <div class="detail-item">
+                            <div>UAS</div>
+                            <div class="detail-value">95</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Layar Perilaku -->
+        <div id="behavior-screen" class="detail-screen">
+            <div class="detail-header">
+                <div class="back-button" onclick="hideDetailScreen('behavior-screen')">←</div>
+                <h1 style="font-size: 18px; margin: 0;">Perilaku di Sekolah</h1>
+            </div>
+            
+            <div class="detail-content">
+                <div class="behavior-chart">
+                    [Grafik Perkembangan Perilaku]
+                </div>
+                
+                <div class="behavior-report">
+                    <div class="report-header">
+                        <div class="report-teacher">Ibu Siti Nurhayati</div>
+                        <div class="report-date">15 Maret 2025</div>
+                    </div>
+                    <div class="report-content">
+                        Ahmad menunjukkan perilaku yang baik di kelas. Ia aktif bertanya dan membantu teman-temannya. Namun perlu meningkatkan kedisiplinan waktu karena beberapa kali terlambat masuk kelas.
+                    </div>
+                </div>
+                
+                <div class="behavior-report">
+                    <div class="report-header">
+                        <div class="report-teacher">Bapak Joko Widodo</div>
+                        <div class="report-date">20 Februari 2025</div>
+                    </div>
+                    <div class="report-content">
+                        Ahmad merupakan siswa yang kooperatif dan sopan. Ia menunjukkan sikap yang baik terhadap guru dan teman. Perlu meningkatkan keaktifan dalam kegiatan kelompok.
+                    </div>
+                </div>
+                
+                <div class="behavior-report">
+                    <div class="report-header">
+                        <div class="report-teacher">Ibu Ratna Dewi</div>
+                        <div class="report-date">10 Januari 2025</div>
+                    </div>
+                    <div class="report-content">
+                        Ahmad terlihat kurang antusias pada beberapa pelajaran. Namun ia tetap menghormati guru dan mengikuti instruksi dengan baik. Diharapkan dapat lebih proaktif dalam berpartisipasi di kelas.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPaymentScreen() {
+            hideAllScreens();
+            document.getElementById('payment-screen').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('payment-screen').style.transform = 'translateY(0)';
+            }, 10);
+        }
+        
+        function showViolationsScreen() {
+            hideAllScreens();
+            document.getElementById('violations-screen').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('violations-screen').style.transform = 'translateY(0)';
+            }, 10);
+        }
+        
+        function showGradesScreen() {
+            hideAllScreens();
+            document.getElementById('grades-screen').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('grades-screen').style.transform = 'translateY(0)';
+            }, 10);
+        }
+        
+        function showBehaviorScreen() {
+            hideAllScreens();
+            document.getElementById('behavior-screen').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('behavior-screen').style.transform = 'translateY(0)';
+            }, 10);
+        }
+        
+        function hideDetailScreen(id) {
+            document.getElementById(id).style.transform = 'translateY(100%)';
+            setTimeout(() => {
+                document.getElementById(id).style.display = 'none';
+            }, 300);
+        }
+        
+        function hideAllScreens() {
+            const screens = document.querySelectorAll('.detail-screen');
+            screens.forEach(screen => {
+                screen.style.transform = 'translateY(100%)';
+                setTimeout(() => {
+                    screen.style.display = 'none';
+                }, 300);
+            });
+        }
+    </script>
+</body>
+</html>
