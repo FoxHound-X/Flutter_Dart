@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            SizedBox(height: 50),
             Text(
               "MASUKAN E-ID SSRI",
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
@@ -74,6 +75,8 @@ class MyApp extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 30),
+
+                    //Tombol Masuk
                     MaterialButton(
                       onPressed: () {},
                       minWidth: 200,
@@ -81,15 +84,20 @@ class MyApp extends StatelessWidget {
                       color: Color(0xff2B2C28),
                       textColor: Colors.white,
                     ),
+                    SizedBox(height: 20),
 
+                    //Teks Informasi
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 50),
-                      child: Column(
-                        children: [
-                          Text(
-                            '*Jika Belum Mendapatkan Email dan NIS Terdaftar, silahkan hubungi Operator',
+                      padding: const EdgeInsets.symmetric(horizontal: 90),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Masukkan Email dan NIS yang Di Berikan Operator Sekolah',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ],
